@@ -65,7 +65,7 @@ Sistema Automático
             subtype = 'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             filename = caminho.name)
 
-    with smtplib.SMTP('smtp.office365.com', 587) as smtp:
+    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.starttls()
         smtp.login(EMAIL_USER, EMAIL_PASS)
         smtp.send_message(email)
