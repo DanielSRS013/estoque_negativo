@@ -1,4 +1,3 @@
-import mimetypes
 import streamlit as st
 import pandas as pd
 import smtplib
@@ -6,7 +5,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.message import EmailMessage
 from pathlib import Path
-import os
 
 lojas = ['LNY BARRA',
          'LNY BH',
