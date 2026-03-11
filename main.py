@@ -62,7 +62,9 @@ Sistema Automático
             filename = caminho.name)
 
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+        smtp.ehlo()
         smtp.starttls()
+        smtp.ehlo()
         smtp.login(EMAIL_USER, EMAIL_PASS)
         smtp.send_message(email)
 
