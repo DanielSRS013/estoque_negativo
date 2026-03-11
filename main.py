@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 import smtplib
 from email.message import EmailMessage
-from pathlib import Path
 from io import BytesIO
 
 lojas = ['LNY BARRA',
@@ -157,9 +156,4 @@ if st.session_state.produtos:
             st.success('E-mail enviado com sucesso!')
 
 
-            '''df_produtos = pd.DataFrame(produtos)
-            arquivo = 'formulario-estoque.xlsx'
-            df_produtos_loja = df_produtos['Loja'].unique()
-            df_produtos.to_excel(arquivo, index=False)
-            send_email(df_excel = arquivo, loja = df_produtos_loja[0])
-            st.success('E-mail enviado com sucesso!')'''
+            
