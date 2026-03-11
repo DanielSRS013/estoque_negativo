@@ -1,8 +1,10 @@
+from email.message import EmailMessage
 import streamlit as st
 import pandas as pd
 import smtplib
 from email.message import EmailMessage
 from pathlib import Path
+from io import BytesIO
 
 lojas = ['LNY BARRA',
          'LNY BH',
@@ -39,20 +41,20 @@ if 'produtos' not in st.session_state:
 EMAIL_USER = st.secrets["EMAIL_USER"]
 EMAIL_PASS = st.secrets["EMAIL_PASS"]
 
-def send_email(df_excel, loja):
+"""def send_email(buffer, loja):
     email = EmailMessage()
     email['Subject'] = f'FORMULÁRIO ESTOQUE NEGATIVO {loja}'
     email['From'] = EMAIL_USER
     email['To'] = 'aprendiz.auditoria@lennyniemeyer.com'
-    email['Cc'] = 'alice.costa@lennyniemeyer.com; girlene.silva@lennyniemeyer.com'
+    #email['Cc'] = 'alice.costa@lennyniemeyer.com; girlene.silva@lennyniemeyer.com'
 
-    email.set_content("""Olá,
+    email.set_content(Olá,
 Segue em anexo o formulário de estoque em formato Excel.
 Atenciosamente,
 Sistema Automático
-""")
+)
     
-    caminho = Path(df_excel)
+    caminho = Path(buffer)
 
     with open(caminho, 'rb') as f:
         email.add_attachment(
@@ -60,6 +62,35 @@ Sistema Automático
             maintype = 'application',
             subtype = 'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             filename = caminho.name)
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+        smtp.login(EMAIL_USER, EMAIL_PASS)
+        smtp.send_message(email)"""
+
+def send_email(buffer, loja):
+
+    email = EmailMessage()
+    email['Subject'] = f'FORMULÁRIO ESTOQUE NEGATIVO {loja}'
+    email['From'] = EMAIL_USER
+    email['To'] = 'aprendiz.auditoria@lennyniemeyer.com'
+
+    email.set_content("""Olá,
+Segue em anexo o formulário de estoque em formato Excel.
+Atenciosamente,
+Sistema Automático
+""")
+
+    buffer.seek(0)
+
+    email.add_attachment(
+        buffer.read(),
+        maintype='application',
+        subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        filename='formulario-estoque.xlsx'
+    )
 
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.ehlo()
@@ -136,9 +167,28 @@ if st.session_state.produtos:
             st.stop()
 
         else:         
+            
             df_produtos = pd.DataFrame(produtos)
+            buffer = BytesIO()
+            df_produtos.to_excel(buffer, index=False)
+            buffer.seek(0)
+
+            email = EmailMessage()
+            email.add_attachment(
+                buffer.read(),
+                maintype='application',
+                subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                filename='formulario-estoque.xlsx'
+            )
+            
+            df_produtos_loja = df_produtos['Loja'].unique()
+            send_email(buffer, df_produtos_loja[0])
+            st.success('E-mail enviado com sucesso!')
+
+
+            '''df_produtos = pd.DataFrame(produtos)
             arquivo = 'formulario-estoque.xlsx'
             df_produtos_loja = df_produtos['Loja'].unique()
             df_produtos.to_excel(arquivo, index=False)
             send_email(df_excel = arquivo, loja = df_produtos_loja[0])
-            st.success('E-mail enviado com sucesso!')
+            st.success('E-mail enviado com sucesso!')'''
