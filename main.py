@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from email.message import EmailMessage
 from pathlib import Path
 
@@ -46,7 +44,7 @@ def send_email(df_excel, loja):
     email['Subject'] = f'FORMULÁRIO ESTOQUE NEGATIVO {loja}'
     email['From'] = EMAIL_USER
     email['To'] = 'aprendiz.auditoria@lennyniemeyer.com'
-    #email['Cc'] = 'alice.costa@lennyniemeyer.com; girlene.silva@lennyniemeyer.com'
+    email['Cc'] = 'alice.costa@lennyniemeyer.com; girlene.silva@lennyniemeyer.com'
 
     email.set_content("""Olá,
 Segue em anexo o formulário de estoque em formato Excel.
