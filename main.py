@@ -41,35 +41,6 @@ if 'produtos' not in st.session_state:
 EMAIL_USER = st.secrets["EMAIL_USER"]
 EMAIL_PASS = st.secrets["EMAIL_PASS"]
 
-"""def send_email(buffer, loja):
-    email = EmailMessage()
-    email['Subject'] = f'FORMULÁRIO ESTOQUE NEGATIVO {loja}'
-    email['From'] = EMAIL_USER
-    email['To'] = 'aprendiz.auditoria@lennyniemeyer.com'
-    #email['Cc'] = 'alice.costa@lennyniemeyer.com; girlene.silva@lennyniemeyer.com'
-
-    email.set_content(Olá,
-Segue em anexo o formulário de estoque em formato Excel.
-Atenciosamente,
-Sistema Automático
-)
-    
-    caminho = Path(buffer)
-
-    with open(caminho, 'rb') as f:
-        email.add_attachment(
-            f.read(),
-            maintype = 'application',
-            subtype = 'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            filename = caminho.name)
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.ehlo()
-        smtp.starttls()
-        smtp.ehlo()
-        smtp.login(EMAIL_USER, EMAIL_PASS)
-        smtp.send_message(email)"""
-
 def send_email(buffer, loja):
 
     email = EmailMessage()
